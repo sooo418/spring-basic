@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="comcode">
+	<resultMap type="com.spring.comcode.vo.ComcodeVo" id="comcodeVo">
+		<result property="codeType" column="CODE_TYPE" />
+		<result property="codeId" column="CODE_ID" />
+		<result property="codeName" column="CODE_NAME" />
+	</resultMap>
+	
+	<select id="codeList" resultMap="comcodeVo">
+		SELECT
+		  CODE_TYPE
+		  ,CODE_ID
+		  ,CODE_NAME
+		FROM
+		  COM_CODE
+	</select>
+	
+	<select id="phoneNum" resultMap="comcodeVo">
+		SELECT
+		  CODE_TYPE
+		  ,CODE_ID
+		  ,CODE_NAME
+		FROM
+		  COM_CODE
+		WHERE	CODE_TYPE = 'phone'
+	</select>
+	
+	<select id="codeMenu" resultMap="comcodeVo">
+		SELECT
+		  CODE_TYPE
+		  ,CODE_ID
+		  ,CODE_NAME
+		FROM
+		  COM_CODE
+		WHERE	CODE_TYPE = 'menu'
+	</select>
+
+</mapper>
