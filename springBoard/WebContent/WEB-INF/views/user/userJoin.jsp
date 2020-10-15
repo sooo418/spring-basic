@@ -55,21 +55,20 @@
 				}
 			});
 		});
-		
 		$j(".joinForm").validate({
-			focusCleanup: true, //true이면 잘못된 필드에 포커스가 가면 에러를 지움
-			focusInvalid:false, //유효성 검사후 포커스를 무효필드에 둠 꺼놓음
-			onclick: false, //클릭시 발생됨 꺼놓음
-			onfocusout:false, //포커스가 아웃되면 발생됨 꺼놓음
-			onkeyup:false, //키보드 키가 올라가면 발생됨 꺼놓음
+			onkeyup: function (element){
+				$j(element).valid();
+			},
 			rules : {
 				userId : {required:true, minlength:3, maxlength:15},
 				userPw : {required:true, minlength:8, maxlength:16},
 				userPwcheck : {required:true, equalTo:"#userPw"},
-				userName : {required:true, minlength:2, maxlength:15},
+				userName : {required:true, minlength:2, maxlength:7},
 				userPhone2 : {required:true, digits:true, minlength:4},
 				userPhone3 : {required:true, digits:true, minlength:4},
 				userAddr1 : {addr1Regx:true},
+				userAddr2 : {maxlength:75},
+				userCompany : {maxlength:30}
 			},
 			messages : {
 				userId : {required:"ID를 입력해주세요"},
@@ -91,10 +90,10 @@
 					minlength:$j.validator.format( "PHONE {0}자 이상 입력하세요." )},
 					
 				userAddr1 : {addr1Regx:$j.validator.format( "xxx-xxx형식으로 입력해주세요." )},
+				userAddr2 : {maxlength:$j.validator.format( "{0}자를 넘을 수 없습니다. " )},
+				userCompany : {maxlength:$j.validator.format( "{0}자를 넘을 수 없습니다. " )}
 			},
-			errorPlacement: function (){ //validator는 기본적으로 validation 실패시 메세지를 우측에 표시하게 되어있다 원치않으면 입력해놓을것 안쓰면 에러표시됨
-				console.log("errorPlacement")
-			},
+			
 			submitHandler: function(form) { //모든 항목이 통과되면 호출됨 showError 와 함께 쓰면 실행하지않는다
 				if(overlapCheck!=true){
 					alert("ID를 중복확인해주세요.");
@@ -170,9 +169,16 @@
 					if(inputVal.length>=3){
 						if(inputVal.length==3){
 							$j(this).val(inputVal+'-');
-						}else if(inputVal.length>3 && inputVal.valueOf().substr(3,1)!='-'){
-							$j(this).val(inputVal.valueOf().substr(0,3)+'-'+inputVal.valueOf().substr(3))
+						}else if(inputVal.length>3 && inputVal.length<7 && inputVal.valueOf().substr(3,1)!='-'){
+							$j(this).val(inputVal.valueOf().substr(0,3)+'-'+inputVal.valueOf().substr(3));
+						}else if(inputVal.length==7 && inputVal.valueOf().substr(3,1)!='-'){
+							$j(this).val(inputVal.valueOf().substr(0,3)+'-'+inputVal.valueOf().substr(4,3));
 						}
+					}
+				}
+				else{
+					if(inputVal.length==4 && inputVal.valueOf().substr(3,1)=='-'){
+						$j(this).val(inputVal.valueOf().substr(0,3));
 					}
 				}
 			}
@@ -223,7 +229,7 @@
 						<label for="name">name</label>
 						</td>
 						<td>
-						<input type="text" id="userName" name="userName" maxlength="16"
+						<input type="text" id="userName" name="userName" maxlength="6"
 						 value="${user.userName}">
 						</td>
 					</tr>
