@@ -9,6 +9,13 @@
 </head>
 <script type="text/javascript">
 	$j(document).ready(function(){
+		$j('.boardTitle').each(function(i,e){
+			if($j(this).html().length>18){
+				var boardTitle = $j(this).html().substr(0,18);
+				$j(this).html(boardTitle+'...');
+			}
+		});
+		
 		$j('#checkAll').click(function(){
 			if($j('#checkAll').prop("checked")){
 				$j('input[name="check"]').prop("checked", true);
@@ -107,7 +114,7 @@
 							${list.boardNum}
 						</td>
 						<td>
-							<a href = "/board/${list.boardType}/${list.boardNum}/boardView.do">${list.boardTitle}</a>
+							<a class="boardTitle" href = "/board/${list.boardType}/${list.boardNum}/boardView.do">${list.boardTitle}</a>
 						</td>
 					</tr>	
 				</c:forEach>

@@ -10,6 +10,14 @@
 <script type="text/javascript">
 	$j(document).ready(function(){
 		$j("#updateSubmit").click(function(){
+			if($j('#boardTitle').val().trim()==""){
+				alert("TITLE을 입력해주세요.");
+				return false;
+			}
+			if($j('#boardComment').val().trim()==""){
+				alert("COMMENT를 입력해주세요.");
+				return false;
+			}
 			var $frm = $j(".boardUpdate :input");
 			var param = $frm.serialize();
 			$j.ajax({
@@ -29,6 +37,7 @@
 				}
 			});
 		});
+		
 	});
 	
 </script>
@@ -36,7 +45,6 @@
 <form class="boardUpdate">
 	<input name="boardType" value="${board.boardType}" style="display: none;">
 	<input name="boardNum" value="${board.boardNum}" style="display: none;">
-	<input name="creator" value="${board.creator}" style="display: none;">
 	<table align="center">
 		<tr>
 			<td>
@@ -46,7 +54,7 @@
 						Title
 						</td>
 						<td width="400">
-						<input name="boardTitle" type="text" size="50" value="${board.boardTitle}"> 
+						<input id="boardTitle" name="boardTitle" type="text" size="50" maxlength="25" value="${board.boardTitle}"> 
 						</td>
 					</tr>
 					<tr>
@@ -54,7 +62,7 @@
 						Comment
 						</td>
 						<td valign="top">
-							<textarea name="boardComment"  rows="20" cols="55">${board.boardComment}</textarea>
+							<textarea id="boardComment" name="boardComment"  rows="20" maxlength="500" cols="55">${board.boardComment}</textarea>
 							</td>
 					</tr>
 					<tr>
@@ -62,7 +70,8 @@
 						Writer
 						</td>
 						<td>
-						${board.creator}
+						${board.userVo.userName}
+						<input name="creator" value="${board.creator}" style="display: none">
 						</td>
 					</tr>
 				</table>

@@ -1,5 +1,7 @@
 package com.spring.board.vo;
 
+import com.spring.user.vo.UserVo;
+
 public class BoardVo {
 	
 	private String 	boardType;
@@ -9,6 +11,7 @@ public class BoardVo {
 	private String 	creator;
 	private String	modifier;
 	private int totalCnt;
+	private UserVo userVo;
 	
 	
 	public int getTotalCnt() {
@@ -53,6 +56,10 @@ public class BoardVo {
 	public void setModifier(String modifier) {
 		this.modifier = modifier;
 	}
-	
-	
+	public UserVo getUserVo() {
+		return userVo;
+	}
+	public void setUserVo(UserVo userVo) {
+		this.userVo = userVo;
+	}
 }

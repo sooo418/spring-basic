@@ -56,9 +56,12 @@
 			});
 		});
 		$j(".joinForm").validate({
-			onkeyup: function (element){
-				$j(element).valid();
+			onkeyup : function (element){
+				if($j(element).attr('name')=="userPwcheck"){
+					$j(element).valid();
+				}
 			},
+			onfocusout : false,
 			rules : {
 				userId : {required:true, minlength:3, maxlength:15},
 				userPw : {required:true, minlength:8, maxlength:16},
@@ -71,7 +74,9 @@
 				userCompany : {maxlength:30}
 			},
 			messages : {
-				userId : {required:"ID를 입력해주세요"},
+				userId : {required:"ID를 입력해주세요",
+					minlength:$j.validator.format( "ID에 {0}자 이상 입력하세요." ),
+					maxlength:$j.validator.format( "ID는 {0}자를 넘을 수 없습니다. " )},
 				
 				userPw : {required:"PW를 입력해주세요",
 					minlength:$j.validator.format( "PW에 {0}자 이상 입력하세요." ),
@@ -93,13 +98,21 @@
 				userAddr2 : {maxlength:$j.validator.format( "{0}자를 넘을 수 없습니다. " )},
 				userCompany : {maxlength:$j.validator.format( "{0}자를 넘을 수 없습니다. " )}
 			},
-			
+			errorPlacement : function(error, element){
+				if($j(element).attr('name')=="userPwcheck"){
+					element.after(error);
+				}
+			},
 			submitHandler: function(form) { //모든 항목이 통과되면 호출됨 showError 와 함께 쓰면 실행하지않는다
 				if(overlapCheck!=true){
 					alert("ID를 중복확인해주세요.");
 					return false;
 				}
-				$j(".joinForm").attr("onsubmit", "event.preventDefault();");
+				$j('.joinForm').attr("onsubmit", "event.preventDefault();");
+				if($j('#userName').val().trim()==""){
+					alert('name에 값을 채워주세요');
+					return false;
+				}
 				var $frm = $j('.joinForm :input');
 				var param = $frm.serialize();
 				$j.ajax({
@@ -151,6 +164,14 @@
 				$j(this).val(inputVal.replace(/[^0-9]/gi,""));
 			}
 		});
+		$j('input[name=userPhone2]').keyup(function(event){
+			if(!(event.keyCode > 37 && event.keyCode <= 40)){
+				var inputVal = $j(this).val();
+				if(inputVal.length==4){
+					$j('input[name=userPhone3]').focus();
+				}
+			}
+		});
 		$j('input[name=userAddr2]').keyup(function(event){
 			if(!(event.keyCode > 37 && event.keyCode <= 40)){
 				var inputVal = $j(this).val();
@@ -177,7 +198,9 @@
 					}
 				}
 				else{
-					if(inputVal.length==4 && inputVal.valueOf().substr(3,1)=='-'){
+					if(inputVal.length==3){
+						$j(this).val(inputVal.valueOf().substr(0,2));
+					}else if(inputVal.length==4 && inputVal.valueOf().substr(3,1)=='-'){
 						$j(this).val(inputVal.valueOf().substr(0,3));
 					}
 				}

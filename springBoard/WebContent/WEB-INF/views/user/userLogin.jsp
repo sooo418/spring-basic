@@ -15,34 +15,56 @@
 				$j(this).val(inputVal.replace(/[^a-z0-9]/gi,""));
 			}
 		});
-	});
-	$j(document).ready(function(){
-		$j("#submit").click(function(){
-			var $frm = $j('.loginForm :input');
-			var param = $frm.serialize();
-			$j.ajax({
-				url : "/user/userLoginAction.do",
-				data : param,
-				type : "POST",
-				dataType : "json",
-				timeout : 1000,
-				traditional : true,
-				success : function(data, textStatus, jqXHR){
-					if(data.result=="notpw"){
-						alert("PW가 잘못되었습니다.");
-						$j("#userPw").val("");
-					}else if(data.result=="emptyid"){
-						alert("ID가 존재하지 않습니다.");
-						$j("#userId").val("");
-					}else if(data.result=="loginsuccess"){
-						window.location.href="/board/boardList.do";
+		
+		$j('.loginForm').validate({
+			
+			rules : {
+				userId : {required:true},
+				userPw : {required:true}
+			},
+			messages : {
+				userId : {required:"ID를 입력해주세요."},
+				userPw : {required:"PW를 입력해주세요."}
+			},
+			errorPlacement(error,element){
+				console.log(error);
+			},
+			submitHandler : function(form){
+				$j('.loginForm').attr("onsubmit", "event.preventDefault();");
+				
+				var $frm = $j('.loginForm :input');
+				var param = $frm.serialize();
+				$j.ajax({
+					url : "/user/userLoginAction.do",
+					data : param,
+					type : "POST",
+					dataType : "json",
+					timeout : 1000,
+					traditional : true,
+					success : function(data, textStatus, jqXHR){
+						if(data.result=="notpw"){
+							alert("PW가 잘못되었습니다.");
+							$j("#userPw").val("");
+						}else if(data.result=="emptyid"){
+							alert("ID가 존재하지 않습니다.");
+							$j("#userId").val("");
+						}else if(data.result=="loginsuccess"){
+							window.location.href="/board/boardList.do";
+						}
+					},
+					error : function(jqXHR, textStatus, errorThrown){
+						alert("에러")
 					}
-				},
-				error : function(jqXHR, textStatus, errorThrown){
-					alert("에러")
+				});
+			},
+			invalidHandler : function(form, validator){
+				var errors = validator.numberOfInvalids();
+				if(errors){
+					alert(validator.errorList[0].message);
+					validator.errorList[0].element.focus();
 				}
-			})
-		})
+			}
+		});
 	});
 
 </script>
@@ -54,7 +76,7 @@
 				<table border=1>
 					<tr>
 						<td width=120 align="center">
-							<label for="id">id</label>
+							<label for="userId">id</label>
 							</td>
 						<td width = 200>
 						<input type="text" id="userId" name="userId" maxlength="15"
@@ -63,7 +85,7 @@
 					</tr>
 					<tr>
 						<td align="center">
-							<label for="pw">pw</label>
+							<label for="userPw">pw</label>
 						</td>
 						<td>
 							<input type="password" id="userPw" name="userPw" maxlength="16"
@@ -75,7 +97,7 @@
 		</tr>
 		<tr>
 			<td align="right">
-			<input type="button" id="submit" value="login">
+			<button>login</button>
 			</td>
 		</tr>
 	</table>

@@ -8,7 +8,19 @@
     	<result property="boardTitle" 	column="BOARD_TITLE"/>
     	<result property="boardComment" column="BOARD_COMMENT"/>
     	<result property="creator" 		column="CREATOR"/>
+    	<collection property="userVo"	resultMap="userVo"/>
     </resultMap>
+    <resultMap type="com.spring.user.vo.UserVo" id="userVo">
+		<result property="userId"		column="USER_ID"/>
+		<result property="userPw"		column="USER_PW"/>
+		<result property="userName" 	column="USER_NAME"/>
+		<result property="userPhone1"	column="USER_PHONE1"/>
+		<result property="userPhone2"	column="USER_PHONE2"/>
+		<result property="userPhone3"	column="USER_PHONE3"/>
+		<result property="userAddr1" 	column="USER_ADDR1"/>
+		<result property="userAddr2"	column="USER_ADDR2"/>
+		<result property="userCompany"	column="USER_COMPANY"/>
+	</resultMap>
     
     <select id="boardList" parameterType="com.spring.board.vo.PageVo" resultMap="boardVo">
         SELECT 
@@ -82,15 +94,19 @@
     	
     <select id="boardView" parameterType="com.spring.board.vo.BoardVo" resultMap="boardVo">
     	SELECT
-        	BOARD_TYPE
-			,BOARD_NUM
-			,BOARD_TITLE
-			,BOARD_COMMENT
-			,CREATOR
+        	B.BOARD_TYPE
+			,B.BOARD_NUM
+			,B.BOARD_TITLE
+			,B.BOARD_COMMENT
+			,B.CREATOR
+			,U.USER_NAME
 		FROM
-			BOARD
-    	WHERE 	BOARD_TYPE = #{boardType}
-    	AND 	BOARD_NUM  = #{boardNum}
+			BOARD B
+		JOIN
+			USER_INFO U
+		ON	B.CREATOR = U.USER_ID
+    	WHERE 	B.BOARD_TYPE = #{boardType}
+    	AND 	B.BOARD_NUM  = #{boardNum}
     </select>	
     
     <select id="boardInsert" parameterType="com.spring.board.vo.BoardVo">

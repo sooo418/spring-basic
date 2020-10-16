@@ -65,7 +65,12 @@
 						Writer
 						</td>
 						<td>
-						${board.creator}
+						<c:set var="boardType" value="${board.boardType}"></c:set>
+						<c:if test="${boardType eq 'a03'}">
+						</c:if>
+						<c:if test="${boardType ne 'a03'}">
+							${board.userVo.userName}
+						</c:if>
 						</td>
 					</tr>
 				</table>
@@ -76,8 +81,8 @@
 				<a href="/board/boardList.do">List</a>
 				<c:if test="${!empty login}">
 					<c:set var="writer" value="${board.creator}"></c:set>
-					<c:set var="userName" value="${login.userName}"></c:set>
-					<c:if test="${writer eq userName}">
+					<c:set var="userId" value="${login.userId}"></c:set>
+					<c:if test="${writer eq userId}">
 						<a href = "/board/${board.boardType}/${board.boardNum}/boardUpdate.do">Update</a>
 						<a href id="boardDelete">Delete</a>
 					</c:if>

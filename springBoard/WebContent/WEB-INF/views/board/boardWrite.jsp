@@ -10,8 +10,15 @@
 <script type="text/javascript">
 
 	$j(document).ready(function(){
-		
 		$j("#submit").on("click",function(){
+			if($j('#boardTitle').val().trim()==""){
+				alert("TITLE을 입력해주세요.");
+				return false;
+			}
+			if($j('#boardComment').val().trim()==""){
+				alert("COMMENT를 입력해주세요.");
+				return false;
+			}
 			var $frm = $j('.boardWrite :input');
 			var param = $frm.serialize();
 			$j.ajax({
@@ -61,7 +68,8 @@
 						Title
 						</td>
 						<td width="400">
-						<input name="boardTitle" type="text" size="50" value="${board.boardTitle}"> 
+						<input id="boardTitle" name="boardTitle" type="text" size="50"
+						 maxlength="25" value="${board.boardTitle}"> 
 						</td>
 					</tr>
 					<tr>
@@ -69,7 +77,8 @@
 						Comment
 						</td>
 						<td valign="top">
-						<textarea name="boardComment"  rows="20" cols="55">${board.boardComment}</textarea>
+						<textarea id="boardComment" name="boardComment" rows="20"
+						 maxlength="500" cols="55">${board.boardComment}</textarea>
 						</td>
 					</tr>
 					<tr>
@@ -77,10 +86,8 @@
 						Writer
 						</td>
 						<td>
-						<c:if test="${!empty login}">
-							${login.userName}
-							<input name="creator" value="${login.userName}" style="display: none;">
-						</c:if>
+						${login.userName}
+						<input name="creator" value="${login.userId}" style="display: none;">
 						</td>
 					</tr>
 				</table>
