@@ -26,7 +26,8 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 		
-	<context:component-scan base-package="com.spring.board.controller" />
-	<context:component-scan base-package="com.spring.user.controller" />
+	<context:component-scan base-package="com.spring.user" />
+	<context:component-scan base-package="com.spring.board" />
+	<context:component-scan base-package="com.spring.comcode" />
 	
 </beans:beans>
